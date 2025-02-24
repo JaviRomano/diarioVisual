@@ -1,35 +1,43 @@
 import React, { useState } from 'react';
-import { TextInput, Button, View, Text, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import tw from 'twrnc';
+import Header from './Header';
 
 const Register: React.FC = () => {
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState<string>('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const navigation = useNavigation();
 
   const handleRegister = async () => {
-    try {
-      // Verificar que todos los campos sean completados
-      if (!name || !email || !password || !phone) {
-        setError('Por favor complete todos los campos');
-        return;
-      }
+    if (!name || !email || !password || !confirmPassword) {
+      setError('Por favor complete todos los campos');
+      return;
+    }
 
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+
+    try {
       const response = await axios.post('http://localhost/api-diario-visual/registro.php', {
-        name: name,
-        email: email,
-        password: password,
-        phone: phone,
+        name,
+        email,
+        password,
       });
 
       if (response.data.status === 'success') {
         setSuccess('Registro exitoso');
         setError('');
       } else {
-        setError(response.data.message);
+        setError(response.data.message || 'No se pudo completar el registro.');
         setSuccess('');
       }
     } catch (err: any) {
@@ -39,70 +47,64 @@ const Register: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}> Registro</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Nombre"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Correo Electrónico"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        value={password}
-        secureTextEntry
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Teléfono"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-      />
-      <Button title="Registrarse" onPress={handleRegister} color="#800080" />
-      {error && <Text style={styles.error}>{error}</Text>}
-      {success && <Text style={styles.success}>{success}</Text>}
+    <View style={tw`flex-1 bg-black`}>
+      <Header title="Nueva cuenta" />
+
+      <View style={tw`justify-center flex-1`}>
+        <Image source={require('../assets/images/logo.png')} style={tw`h-40 w-40 self-center mb-8 rounded-lg border border-blue-900`} />
+
+        <View style={tw`space-y-4 p-6`}>
+          <TextInput
+            style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg text-white mb-4`}
+            placeholder="Nombre"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#aaa"
+          />
+
+          <TextInput
+            style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg text-white mb-4`}
+            placeholder="Correo Electrónico"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="#aaa"
+          />
+
+          <TextInput
+            style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg text-white mb-4`}
+            placeholder="Contraseña"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            placeholderTextColor="#aaa"
+          />
+
+          <TextInput
+            style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg text-white mb-4`}
+            placeholder="Confirmar Contraseña"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+            placeholderTextColor="#aaa"
+          />
+
+
+          <TouchableOpacity
+            style={{ backgroundColor: '#1E3A8A', paddingVertical: 12, borderRadius: 20, marginTop: 16 }}
+            onPress={handleRegister}
+          >
+            <Text style={tw`text-white text-xl font-bold text-center`}>Registrarse</Text>
+          </TouchableOpacity>
+
+          {error && <Text style={tw`text-red-500 text-center mt-3`}>{error}</Text>}
+          {success && <Text style={tw`text-green-500 text-center mt-3`}>{success}</Text>}
+        </View>
+      </View>
+
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#f0f4f8', // Fondo suave
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingLeft: 8,
-    borderRadius: 10, // Bordes redondeados
-  },
-  error: {
-    color: 'red',
-    marginTop: 10,
-    fontWeight: 'bold', // Texto en negrita
-  },
-  success: {
-    color: 'green',
-    marginTop: 10,
-    fontWeight: 'bold', // Texto en negrita
-  },
-  titulo:{
-    fontSize:25,
-    color:'#800080',
-    fontWeight:'bold',
-  }
-});
 
 export default Register;

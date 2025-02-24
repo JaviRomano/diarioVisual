@@ -1,27 +1,20 @@
-
 import React, { useState } from 'react';
-import { TextInput, View, Text, TouchableOpacity, Image } from 'react-native';
+import { TextInput, View,  Text, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import tw from 'twrnc';
 import Footer from './Footer';
+import Header from './Header';
+import { RootStackParamList } from './src/types';
 
-type RootStackParamList = {
-  Login: undefined;
-  Publicaciones: undefined;
-  Registro: undefined;
-};
+type NavigationProps = StackNavigationProp<RootStackParamList, 'Login'>;
 
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
-
-type Props = {
-  navigation: LoginScreenNavigationProp;
-};
-
-const Login: React.FC<Props> = ({ navigation }) => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigation = useNavigation<NavigationProps>();
 
   const irARegistro = () => {
     navigation.navigate('Registro');
@@ -52,11 +45,15 @@ const Login: React.FC<Props> = ({ navigation }) => {
       setError(errorMessage);
     }
   };
- 
+
   return (
-    <View style={tw`flex-1 justify-center bg-black `}>
+
+    <View style={tw`flex-1 bg-black `}>      
+      <Header title="Iniciar sesión" />
+
+      <View style={tw`justify-center flex-1`}>  
       <Image source={require('../assets/images/logo.png')} style={tw`h-40 w-40 self-center mb-8 rounded-lg border border-blue-900`} />
-      
+
       <View style={tw`space-y-4 p-6`}>
         <TextInput
           style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg mb-4`}
@@ -76,14 +73,14 @@ const Login: React.FC<Props> = ({ navigation }) => {
           placeholderTextColor="#aaa"
         />
         <TouchableOpacity
-          style={{backgroundColor: '#1E3A8A', paddingVertical: 12, borderRadius: 20, marginTop: 16}}
+          style={{ backgroundColor: '#1E3A8A', paddingVertical: 12, borderRadius: 20, marginTop: 16 }}
           onPress={pulsaParaLogin}
         >
           <Text style={tw`text-white text-xl font-bold text-center`}>Acceder</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{backgroundColor: '#1E3A8A', paddingVertical: 12, borderRadius: 20, marginTop: 16}}
+          style={{ backgroundColor: '#1E3A8A', paddingVertical: 12, borderRadius: 20, marginTop: 16 }}
           onPress={irARegistro}
         >
           <Text style={tw`text-white text-xl font-bold text-center`}>Crear Cuenta</Text>
@@ -91,7 +88,8 @@ const Login: React.FC<Props> = ({ navigation }) => {
 
         {error && <Text style={tw`text-red-500 text-center mt-3`}>{error}</Text>}
       </View>
-      <Footer/>
+      </View>
+      <Footer />
     </View>
   );
 };

@@ -12,8 +12,8 @@ import {
 import tw from 'twrnc';
 import { createStackNavigator } from '@react-navigation/stack';
 import SubirPublicacion from './SubirPublicacion';
-import Header from './Header'; 
-import Footer from './Footer'; 
+import Header from './Header';
+import Footer from './Footer';
 import UploadIcon from './UploadIcon';
 
 const formatDate = (dateString) => {
@@ -31,7 +31,7 @@ const formatDate = (dateString) => {
 const Stack = createStackNavigator();
 
 const PublicacionesStack = () => (
-  <Stack.Navigator screenOptions={{headerShown:false}}>
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="PublicacionesList" component={Publicaciones} />
     <Stack.Screen name="SubirPublicacion" component={SubirPublicacion} />
   </Stack.Navigator>
@@ -103,7 +103,7 @@ class Publicaciones extends Component {
 
     return (
       <View style={tw`flex-1 bg-blue-100`}>
-        <Header title="Vistria" /> 
+        <Header title="Vistria" />
 
         <View style={tw`flex-1 p-6 pb-16`}>
           {loading ? (
@@ -122,10 +122,10 @@ class Publicaciones extends Component {
                 contentContainerStyle={tw`flex-grow pb-6`}
                 showsVerticalScrollIndicator={false}
               />
-              
+
               <View style={tw`absolute bottom-10 left-0 right-0 flex items-center`}>
-          <UploadIcon onPress={() => this.props.navigation.navigate('SubirPublicacion')} />
-        </View>
+                <UploadIcon onPress={() => this.props.navigation.navigate('SubirPublicacion')} />
+              </View>
             </>
           )}
         </View>
