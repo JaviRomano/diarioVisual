@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
-import { TextInput, View,  Text, TouchableOpacity, Image } from 'react-native';
-import axios from 'axios';
+import { TextInput, View, Text, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import tw from 'twrnc';
-import Footer from './Footer';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './src/config'; // ✅ Importa config correctamente
 import Header from './Header';
-import { RootStackParamList } from './src/types';
+import Footer from './Footer';
+
+// ✅ Define correctamente el tipo de navegación
+type RootStackParamList = {
+  Login: undefined;
+  Registro: undefined;
+  Publicaciones: undefined;
+};
 
 type NavigationProps = StackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -14,7 +21,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation<NavigationProps>(); // ✅ Agrega tipado correcto
 
   const irARegistro = () => {
     navigation.navigate('Registro');
@@ -27,67 +34,69 @@ const Login: React.FC = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost/api-diario-visual/api-react/login.php', {
-        email,
-        password,
-      });
-
-      if (response.data.status === 'success') {
-        setError('');
-        navigation.navigate('Publicaciones');
-      } else {
-        setError(response.data.message || 'Credenciales incorrectas');
-      }
+      // 🔥 Iniciar sesión con Firebase Authentication
+      await signInWithEmailAndPassword(auth, email, password);
+      setError('');
+      navigation.navigate('Publicaciones'); // ✅ Redirige a publicaciones
     } catch (err: any) {
-      console.error("Error en la petición:", err);
-      const errorMessage =
-        err.response?.data?.message || 'Error al conectar con el servidor. Inténtelo más tarde.';
-      setError(errorMessage);
+      // 🔴 Manejo de errores de Firebase Auth
+      switch (err.code) {
+        case 'auth/invalid-email':
+          setError('El correo no es válido');
+          break;
+        case 'auth/user-not-found':
+          setError('Usuario no encontrado');
+          break;
+        case 'auth/wrong-password':
+          setError('Contraseña incorrecta');
+          break;
+        default:
+          setError('Error al iniciar sesión');
+      }
     }
   };
 
   return (
-
-    <View style={tw`flex-1 bg-black `}>      
+    <View style={tw`flex-1 bg-black `}>
       <Header title="Iniciar sesión" />
 
-      <View style={tw`justify-center flex-1`}>  
-      <Image source={require('../assets/images/logo.png')} style={tw`h-40 w-40 self-center mb-8 rounded-lg border border-blue-900`} />
+      <View style={tw`justify-center flex-1`}>
+        <Image source={require('../assets/images/logo.png')} style={tw`h-40 w-40 self-center mb-8 rounded-lg`} />
 
-      <View style={tw`space-y-4 p-6`}>
-        <TextInput
-          style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg mb-4`}
-          placeholder="E-mail"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="#aaa"
-        />
-        <TextInput
-          style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg`}
-          placeholder="Pass"
-          value={password}
-          secureTextEntry
-          onChangeText={setPassword}
-          placeholderTextColor="#aaa"
-        />
-        <TouchableOpacity
-          style={{ backgroundColor: '#1E3A8A', paddingVertical: 12, borderRadius: 20, marginTop: 16 }}
-          onPress={pulsaParaLogin}
-        >
-          <Text style={tw`text-white text-xl font-bold text-center`}>Acceder</Text>
-        </TouchableOpacity>
+        <View style={tw`space-y-4 p-6`}>
+          <TextInput
+            style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg mb-4 text-white`}
+            placeholder="E-mail"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="#aaa"
+          />
+          <TextInput
+            style={tw`h-10 px-4 rounded-xl border border-blue-900 bg-gray-500 text-lg text-white`}
+            placeholder="Contraseña"
+            value={password}
+            secureTextEntry
+            onChangeText={setPassword}
+            placeholderTextColor="#aaa"
+          />
+          <TouchableOpacity
+            style={tw`bg-blue-900 py-3 rounded-xl mt-4`}
+            onPress={pulsaParaLogin}
+          >
+            <Text style={tw`text-white text-xl font-bold text-center`}>Acceder</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{ backgroundColor: '#1E3A8A', paddingVertical: 12, borderRadius: 20, marginTop: 16 }}
-          onPress={irARegistro}
-        >
-          <Text style={tw`text-white text-xl font-bold text-center`}>Crear Cuenta</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={tw`bg-gray-700 py-3 rounded-xl mt-4`}
+            onPress={irARegistro}
+          >
+            <Text style={tw`text-white text-xl font-bold text-center`}>Crear Cuenta</Text>
+          </TouchableOpacity>
 
-        {error && <Text style={tw`text-red-500 text-center mt-3`}>{error}</Text>}
-      </View>
+          {error && <Text style={tw`text-red-500 text-center mt-3`}>{error}</Text>}
+        </View>
       </View>
       <Footer />
     </View>

@@ -103,12 +103,12 @@ class Publicaciones extends Component {
 
     return (
       <View style={tw`flex-1 bg-blue-100`}>
-        <Header title="Vistria" />
+        <Header title="Miau" />
 
         <View style={tw`flex-1 p-6 pb-16`}>
           {loading ? (
             <View style={tw`flex-1 justify-center items-center`}>
-              <ActivityIndicator size="large" color="#800080" />
+              <ActivityIndicator size="x-large" color="#0D47A1" />
             </View>
           ) : error ? (
             <Text style={tw`text-red-500 text-center mt-10`}>{error}</Text>
