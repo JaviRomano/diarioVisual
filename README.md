@@ -2,7 +2,7 @@
 
 ## 📌 Descripción
 
-Diario Visual es una aplicación desarrollada en **React Native** que permite a los usuarios registrar sus experiencias, almacenar contenido visual y acceder de manera segura mediante **Firebase Authentication**. La información se gestiona con **Firestore Database** para garantizar un almacenamiento seguro y escalable.
+Diario Visual es la práctica final de DeInt del curso DAM, y consiste en una aplicación desarrollada en **React Native** que permite a los usuarios registrar sus experiencias, almacenar contenido visual y acceder de manera segura mediante **Firebase Authentication**. La información se gestiona con **Firestore Database** para garantizar un almacenamiento seguro y escalable.
 
 ## 🎯 **Características Principales**
 
