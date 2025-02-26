@@ -25,7 +25,7 @@ Diario Visual es la práctica final de DeInt del curso DAM, y consiste en una ap
 
 ##  **Instalación y Configuración**
 
-### 2️ **Instalar dependencias**
+###  **Instalar dependencias**
 
 Si usas **npm**:
 
