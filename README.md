@@ -1,10 +1,10 @@
-# 🚀 Diario Visual - Aplicación React Native con Firebase
+#  Diario Visual - Aplicación React Native con Firebase
 
-## 📌 Descripción
+##  Descripción
 
 Diario Visual es la práctica final de DeInt del curso DAM, y consiste en una aplicación desarrollada en **React Native** que permite a los usuarios registrar sus experiencias, almacenar contenido visual y acceder de manera segura mediante **Firebase Authentication**. La información se gestiona con **Firestore Database** para garantizar un almacenamiento seguro y escalable.
 
-## 🎯 **Características Principales**
+##  **Características Principales**
 
 - 📲 **Registro e inicio de sesión** con Firebase Authentication.
 - 🔥 **Gestión de publicaciones** con imágenes y texto almacenados en Firestore.
@@ -12,7 +12,7 @@ Diario Visual es la práctica final de DeInt del curso DAM, y consiste en una ap
 - 💾 **Almacenamiento seguro de imágenes** en Firebase Storage.
 - 🛠 **Interfaz moderna** con React Native y Tailwind CSS para diseño estilizado.
 
-## 🛠 **Tecnologías Utilizadas**
+##  **Tecnologías Utilizadas**
 
 | Tecnología              | Descripción                                   |
 | ----------------------- | --------------------------------------------- |
@@ -23,9 +23,9 @@ Diario Visual es la práctica final de DeInt del curso DAM, y consiste en una ap
 | Tailwind CSS            | Diseño moderno y estilizado                   |
 | Expo                    | Framework para facilitar desarrollo y testing |
 
-## 📥 **Instalación y Configuración**
+##  **Instalación y Configuración**
 
-### 2️⃣ **Instalar dependencias**
+### 2️ **Instalar dependencias**
 
 Si usas **npm**:
 
@@ -39,7 +39,7 @@ Si usas **yarn**:
 yarn install
 ```
 
-### 3️⃣ **Configurar Firebase**
+###  **Configurar Firebase**
 
 1. Crea un proyecto en [**Firebase Console**](https://console.firebase.google.com/).
 2. Agrega una nueva aplicación **(Web App)**.
@@ -66,7 +66,7 @@ const db = getFirestore(app);
 export { auth, db };
 ```
 
-### 4️⃣ **Ejecutar la aplicación**
+###  **Ejecutar la aplicación**
 
 Para iniciar en modo desarrollo:
 
