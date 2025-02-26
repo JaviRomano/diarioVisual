@@ -3,12 +3,10 @@ import { TextInput, View, Text, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import tw from 'twrnc';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './src/config'; // ✅ Importa config correctamente
+import { auth, signInWithEmailAndPassword } from './src/config';
 import Header from './Header';
 import Footer from './Footer';
 
-// ✅ Define correctamente el tipo de navegación
 type RootStackParamList = {
   Login: undefined;
   Registro: undefined;
@@ -21,7 +19,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const navigation = useNavigation<NavigationProps>(); // ✅ Agrega tipado correcto
+  const navigation = useNavigation<NavigationProps>();
 
   const irARegistro = () => {
     navigation.navigate('Registro');
@@ -34,12 +32,11 @@ const Login: React.FC = () => {
     }
 
     try {
-      // 🔥 Iniciar sesión con Firebase Authentication
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("✅ Usuario autenticado:", userCredential.user);
       setError('');
-      navigation.navigate('Publicaciones'); // ✅ Redirige a publicaciones
+      navigation.navigate('Publicaciones');
     } catch (err: any) {
-      // 🔴 Manejo de errores de Firebase Auth
       switch (err.code) {
         case 'auth/invalid-email':
           setError('El correo no es válido');
@@ -61,7 +58,7 @@ const Login: React.FC = () => {
       <Header title="Iniciar sesión" />
 
       <View style={tw`justify-center flex-1`}>
-        <Image source={require('../assets/images/logo.png')} style={tw`h-40 w-40 self-center mb-8 rounded-lg`} />
+        <Image source={require('../assets/images/logo.png')} style={tw`h-40 w-40 self-center mb-8 rounded-lg border border-blue-900`} />
 
         <View style={tw`space-y-4 p-6`}>
           <TextInput

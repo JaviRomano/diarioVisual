@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import tw from 'twrnc';
 import Header from './Header';
+import { Ionicons } from '@expo/vector-icons';
 
 const Register: React.FC = () => {
   const [name, setName] = useState('');
@@ -49,6 +50,12 @@ const Register: React.FC = () => {
   return (
     <View style={tw`flex-1 bg-black`}>
       <Header title="Nueva cuenta" />
+      <TouchableOpacity
+        style={tw`absolute top-3.5 left-4`}
+        onPress={() => navigation.navigate('Login')}
+      >
+        <Ionicons name="arrow-back" size={30} color="white" />
+      </TouchableOpacity>
 
       <View style={tw`justify-center flex-1`}>
         <Image source={require('../assets/images/logo.png')} style={tw`h-40 w-40 self-center mb-8 rounded-lg border border-blue-900`} />
